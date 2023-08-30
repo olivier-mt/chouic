@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useContext } from "react";
 import {
   Text,
   View,
@@ -12,6 +12,8 @@ import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+
+const PlayersContext = createContext("le context");
 
 export default function index() {
   let [fontsLoaded, fontError] = useFonts({

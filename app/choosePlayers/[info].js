@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Text,
   View,
@@ -12,11 +12,16 @@ import { useLocalSearchParams } from "expo-router";
 import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { PlayersContext } from "../_layout";
+
 const choosePlayer = () => {
+  const { theme, setTheme } = useContext(PlayersContext);
+
   const pathname = usePathname();
   const { info } = useLocalSearchParams();
 
   console.log("pathname", pathname);
+  console.log("theme", theme);
 
   return (
     <LinearGradient
@@ -59,6 +64,12 @@ const choosePlayer = () => {
       >
         info:{info}
       </Text>
+      <TouchableOpacity
+        style={{ top: 500 }}
+        onPress={() => setTheme("ligth man")}
+      >
+        <Text> change</Text>
+      </TouchableOpacity>
     </LinearGradient>
   );
 };
