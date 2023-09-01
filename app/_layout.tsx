@@ -10,13 +10,12 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
-
-export const PlayersContext = createContext({});
+import { PlayersContext } from "./functions";
 
 export default function Layout() {
-  const [theme, setTheme] = useState("le dark");
+  const [playersArr, setPlayersArr] = useState([]);
 
-  const obj = { theme, setTheme };
+  const obj = { playersArr, setPlayersArr };
 
   return (
     <PlayersContext.Provider value={obj}>

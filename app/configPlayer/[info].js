@@ -5,21 +5,16 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  Button,
   TextInput,
-  SafeAreaView,
 } from "react-native";
-import {
-  usePathname,
-  Stack,
-  useLocalSearchParams,
-  Link,
-  router,
-} from "expo-router";
+import { Stack, useLocalSearchParams, Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
+import { PlayersContext } from "../functions";
 
 const { width, height } = Dimensions.get("window");
+
+const blue = "#272487";
 
 const configPlayer = () => {
   const [name, setName] = useState("");
@@ -27,6 +22,23 @@ const configPlayer = () => {
   const [preferences, setPreferences] = useState("");
 
   const { info } = useLocalSearchParams();
+
+  const { playersArr, setPlayersArr } = useContext(PlayersContext);
+
+  const addUser = () => {
+    let arr = [...playersArr];
+
+    arr.push({ name: name, gender: gender, preferences: preferences });
+    setPlayersArr(arr);
+  };
+
+  const setAddButton = () => {
+    if ((name.length > 0) & (preferences.length > 0)) {
+      return false;
+    } else return true;
+  };
+
+  console.log("arr", playersArr);
 
   return (
     <LinearGradient
@@ -50,7 +62,7 @@ const configPlayer = () => {
           fontFamily: "Inter_900Black",
           fontSize: 20,
           color: "white",
-          top: 20,
+          top: 25,
         }}
       >
         Ajouter un joueur
@@ -58,41 +70,52 @@ const configPlayer = () => {
       <Link
         style={{
           left: 150,
-          color: "white",
-          fontFamily: "Inter_900Black",
-          fontSize: 20,
         }}
         href="../"
       >
-        X
+        <Text>
+          <Entypo name="cross" size={24} color="white" />
+        </Text>
       </Link>
       <View>
         <TextInput
           style={styles.textInput}
-          placeholder="Prénom de la femme"
+          placeholder={
+            gender === "man" ? "Prénom de l'homme" : "Prénom de la femme"
+          }
           placeholderTextColor="lightgrey"
           onChangeText={setName}
         />
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            backgroundColor: "green",
-            justifyContent: "space-between",
-            height: 55,
-          }}
-        >
+        <View style={styles.genderView}>
           <TouchableOpacity
-            style={{ ...styles.genderChoiceHalf, backgroundColor: "green" }}
+            style={
+              gender === "man"
+                ? styles.genderChoiceHalfActive
+                : styles.genderChoiceHalfInactive
+            }
             onPress={() => setGender("man")}
           >
-            <Text>Homme</Text>
+            <Text
+              style={gender === "man" ? styles.textActive : styles.textInactive}
+            >
+              Homme
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.genderChoiceHalf}
+            style={
+              gender === "woman"
+                ? styles.genderChoiceHalfActive
+                : styles.genderChoiceHalfInactive
+            }
             onPress={() => setGender("woman")}
           >
-            <Text>Femme</Text>
+            <Text
+              style={
+                gender === "woman" ? styles.textActive : styles.textInactive
+              }
+            >
+              Femme
+            </Text>
           </TouchableOpacity>
         </View>
         <Text
@@ -116,7 +139,10 @@ const configPlayer = () => {
         >
           <View style={styles.preferencesView}>
             <TouchableOpacity
-              style={styles.preferencesBtn}
+              style={{
+                ...styles.preferencesBtn,
+                backgroundColor: preferences === "man" ? blue : "white",
+              }}
               onPress={() => {
                 setPreferences("man");
               }}
@@ -127,7 +153,10 @@ const configPlayer = () => {
           </View>
           <View style={styles.preferencesView}>
             <TouchableOpacity
-              style={styles.preferencesBtn}
+              style={{
+                ...styles.preferencesBtn,
+                backgroundColor: preferences === "woman" ? blue : "white",
+              }}
               onPress={() => {
                 setPreferences("woman");
               }}
@@ -138,7 +167,11 @@ const configPlayer = () => {
           </View>
           <View style={styles.preferencesView}>
             <TouchableOpacity
-              style={{ ...styles.preferencesBtn, flexDirection: "row" }}
+              style={{
+                ...styles.preferencesBtn,
+                flexDirection: "row",
+                backgroundColor: preferences === "both" ? blue : "white",
+              }}
               onPress={() => {
                 setPreferences("both");
               }}
@@ -149,11 +182,28 @@ const configPlayer = () => {
             <Text style={styles.preferencesText}>Les deux</Text>
           </View>
         </View>
-
-        <Text>{gender}</Text>
-        <Text>{name}</Text>
-        <Text>{preferences}</Text>
       </View>
+
+      <Link href={"../"} asChild>
+        <TouchableOpacity
+          style={
+            setAddButton() === true
+              ? styles.addBtnInactive
+              : styles.addBtnActive
+          }
+          onPress={addUser}
+          disabled={setAddButton()}
+        >
+          <Text
+            style={{
+              fontWeight: "900",
+              color: setAddButton() === true ? "grey" : "blue",
+            }}
+          >
+            Ajouter
+          </Text>
+        </TouchableOpacity>
+      </Link>
     </LinearGradient>
   );
 };
@@ -167,7 +217,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderColor: "black",
-    // borderWidth: 1,
     width: width * 0.8,
     height: 55,
     marginTop: 20,
@@ -177,12 +226,28 @@ const styles = StyleSheet.create({
     color: "white",
     backgroundColor: "#4542e5",
   },
-  genderChoiceHalf: {
-    backgroundColor: "red",
+  genderView: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    height: 55,
+    marginTop: 30,
+  },
+  genderChoiceHalfInactive: {
+    backgroundColor: "lightgrey",
     width: (width * 0.8) / 2,
     alignItems: "center",
     justifyContent: "center",
   },
+  genderChoiceHalfActive: {
+    backgroundColor: "white",
+    width: (width * 0.8) / 2,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: "4px",
+    borderColor: blue,
+  },
+
   preferencesView: {
     display: "flex",
     alignItems: "center",
@@ -200,5 +265,38 @@ const styles = StyleSheet.create({
     color: "lightgrey",
     marginTop: 10,
     fontWeight: "bold",
+  },
+
+  addBtnActive: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 60,
+    backgroundColor: "white",
+    width: width * 0.8,
+    marginTop: 300,
+    borderWidth: "3px",
+    borderColor: "blue",
+    borderRadius: 10,
+  },
+
+  addBtnInactive: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 60,
+    backgroundColor: "white",
+    width: width * 0.8,
+    marginTop: 300,
+    borderColor: "grey",
+    borderRadius: 10,
+  },
+  textActive: {
+    color: blue,
+    fontWeight: "700",
+  },
+  textInactive: {
+    color: "grey",
+    fontWeight: "700",
   },
 });

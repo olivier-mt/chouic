@@ -1,27 +1,30 @@
 import React, { useContext } from "react";
-import {
-  Text,
-  View,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import { View, Dimensions, StyleSheet, SafeAreaView } from "react-native";
 import { usePathname, Stack } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { PlayersContext } from "../_layout";
+import { PlayersContext } from "../functions";
+import Player from "../../components/Player";
+const screenWidth = Dimensions.get("window").width;
 
 const choosePlayer = () => {
-  const { theme, setTheme } = useContext(PlayersContext);
+  const { playersArr, setPlayersArr } = useContext(PlayersContext);
 
   const pathname = usePathname();
   const { info } = useLocalSearchParams();
 
-  console.log("pathname", pathname);
-  console.log("theme", theme);
+  const displayPlayers = () => {
+    return (
+      <View style={{ marginTop: 30 }}>
+        {playersArr.length > 0 &&
+          playersArr.map((player, index) => (
+            <Player key={index} player={player} index={index} />
+          ))}
+      </View>
+    );
+  };
 
   return (
     <LinearGradient
@@ -32,44 +35,43 @@ const choosePlayer = () => {
       }
       style={{
         ...styles.container,
-        //  backgroundColor: info === "couple" ? `pink` : "blue",
       }}
     >
-      <Stack.Screen
-        options={{
-          title: info === "couple" ? `En Couple` : "En Groupe",
-          headerTransparent: true,
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontFamily: "Inter_900Black",
-            fontSize: 20,
-          },
-        }}
-      />
+      <SafeAreaView>
+        <Stack.Screen
+          options={{
+            title: info === "couple" ? `En Couple` : "En Groupe",
+            headerTransparent: true,
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontFamily: "Inter_900Black",
+              fontSize: 20,
+            },
+          }}
+        />
 
-      <Link
-        style={{
-          top: 120,
-          fontFamily: "Inter_900Black",
-          color: "white",
-        }}
-        href={`/configPlayer/${info}`}
-      >
-        Ajouter un joueur
-      </Link>
-      <Text
-        style={{
-          top: 200,
-        }}
-      >
-        info:{info}
-      </Text>
-      <TouchableOpacity
-        style={{ top: 500 }}
-        onPress={() => setTheme("ligth man")}
-      >
-        <Text> change</Text>
-      </TouchableOpacity>
+        <View>{displayPlayers()}</View>
+        <View
+          style={{
+            display: "flex",
+            // backgroundColor: "blue",
+            width: screenWidth,
+            alignItems: "center",
+          }}
+        >
+          <Link
+            style={{
+              marginTop: 20,
+              fontFamily: "Inter_900Black",
+              color: "white",
+              //  backgroundColor: "green",
+            }}
+            href={`/configPlayer/${info}`}
+          >
+            Ajouter un joueur
+          </Link>
+        </View>
+      </SafeAreaView>
     </LinearGradient>
   );
 };
