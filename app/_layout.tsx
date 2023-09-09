@@ -45,6 +45,8 @@ export default function Layout() {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen name="chooseLevel/[info]" options={{}} />
       </Stack>
     </PlayersContext.Provider>
   );

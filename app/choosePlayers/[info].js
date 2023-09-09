@@ -1,12 +1,20 @@
-import React, { useContext } from "react";
-import { View, Dimensions, StyleSheet, SafeAreaView } from "react-native";
+import React, { useContext, useEffect, useMemo } from "react";
+import {
+  View,
+  Dimensions,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import { usePathname, Stack } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { PlayersContext } from "../functions";
 import Player from "../../components/Player";
+
 const screenWidth = Dimensions.get("window").width;
 
 const choosePlayer = () => {
@@ -14,6 +22,18 @@ const choosePlayer = () => {
 
   const pathname = usePathname();
   const { info } = useLocalSearchParams();
+
+  console.log("screenHeight", []);
+
+  useEffect(() => {
+    screenHeight = Dimensions.get("window").height;
+
+    if (playersArr.length < 1) {
+      setTimeout(() => {
+        router.push(`/configPlayer/${info}`);
+      }, 1000);
+    }
+  }, []);
 
   const displayPlayers = () => {
     return (
@@ -37,6 +57,27 @@ const choosePlayer = () => {
         ...styles.container,
       }}
     >
+      <Link href={`/chooseLevel/${info}.js`} asChild>
+        <TouchableOpacity
+          style={
+            playersArr.length < 2
+              ? styles.startButtonInactive
+              : styles.startButtonActive
+          }
+          disabled={playersArr.length < 2 ? true : false}
+        >
+          <Text
+            style={
+              playersArr.length < 2
+                ? styles.textButtonInactive
+                : styles.textButtonActive
+            }
+          >
+            Lancer la partie
+          </Text>
+        </TouchableOpacity>
+      </Link>
+
       <SafeAreaView>
         <Stack.Screen
           options={{
@@ -88,5 +129,41 @@ const styles = StyleSheet.create({
     flex: 1,
 
     alignItems: "center",
+  },
+  startButtonInactive: {
+    position: "absolute",
+    top: "80%",
+    zIndex: 6,
+
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 60,
+    backgroundColor: "white",
+    width: screenWidth * 0.8,
+    borderColor: "grey",
+    borderRadius: 10,
+  },
+  startButtonActive: {
+    position: "absolute",
+    top: "80%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 60,
+    backgroundColor: "white",
+    width: screenWidth * 0.8,
+    borderColor: "grey",
+    borderRadius: 10,
+    borderWidth: "2px",
+    borderColor: "blue",
+  },
+  textButtonInactive: {
+    color: "grey",
+    fontWeight: "900",
+  },
+  textButtonActive: {
+    color: "blue",
+    fontWeight: "900",
   },
 });
