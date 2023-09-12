@@ -12,13 +12,16 @@ import { useLocalSearchParams } from "expo-router";
 import { Link, router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { PlayersContext } from "../functions";
+import { PlayersContext } from "../PlayersContext";
 import Player from "../../components/Player";
+import { PlayerI } from "../Interfaces";
 
 const screenWidth = Dimensions.get("window").width;
 
 const choosePlayer = () => {
-  const { playersArr, setPlayersArr } = useContext(PlayersContext);
+  const { playersArr } = useContext(PlayersContext);
+
+  console.log("player Arr", playersArr);
 
   const pathname = usePathname();
   const { info } = useLocalSearchParams();
@@ -26,7 +29,7 @@ const choosePlayer = () => {
   console.log("screenHeight", []);
 
   useEffect(() => {
-    screenHeight = Dimensions.get("window").height;
+    // screenHeight = Dimensions.get("window").height;
 
     if (playersArr.length < 1) {
       setTimeout(() => {
@@ -39,7 +42,7 @@ const choosePlayer = () => {
     return (
       <View style={{ marginTop: 30 }}>
         {playersArr.length > 0 &&
-          playersArr.map((player, index) => (
+          playersArr.map((player: PlayerI, index: number) => (
             <Player key={index} player={player} index={index} />
           ))}
       </View>
@@ -153,9 +156,8 @@ const styles = StyleSheet.create({
     height: 60,
     backgroundColor: "white",
     width: screenWidth * 0.8,
-    borderColor: "grey",
     borderRadius: 10,
-    borderWidth: "2px",
+    borderWidth: 2,
     borderColor: "blue",
   },
   textButtonInactive: {

@@ -8,22 +8,22 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { player as playerType } from "../app/Types";
-import { PlayersContext } from "../app/functions";
+import { PlayersContext } from "../app/PlayersContext";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 
 const screenWidth = Dimensions.get("window").width;
 
-const Player = ({ player, index }: { player: playerType; index: string }) => {
+const Player = ({ player, index }: { player: playerType; index: number }) => {
   const { playersArr, setPlayersArr } = useContext(PlayersContext);
 
   const deleteUser = () => {
-    const indexNum = parseInt(index);
+    // const indexNum = parseInt(index);
 
     const arr = [...playersArr];
 
-    arr.splice(indexNum, 1);
+    arr.splice(index, 1);
 
-    setPlayersArr(arr);
+    setPlayersArr && setPlayersArr(arr);
   };
 
   const blue = "#272487";

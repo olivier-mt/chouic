@@ -10,10 +10,14 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
-import { PlayersContext } from "./functions";
+import { PlayersContext } from "./PlayersContext";
+import { PlayerI } from "./Interfaces";
+import { contextType } from "./PlayersContext";
+
+type PlayerArrType = [] | PlayerI[];
 
 export default function Layout() {
-  const [playersArr, setPlayersArr] = useState([]);
+  const [playersArr, setPlayersArr] = useState<PlayerArrType>([]);
 
   const obj = { playersArr, setPlayersArr };
 
@@ -47,6 +51,8 @@ export default function Layout() {
         />
 
         <Stack.Screen name="chooseLevel/[info]" options={{}} />
+
+        <Stack.Screen name="wheelScreen/[info]" options={{}} />
       </Stack>
     </PlayersContext.Provider>
   );

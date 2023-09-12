@@ -10,7 +10,7 @@ import {
 import { Stack, useLocalSearchParams, Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import { PlayersContext } from "../functions";
+import { PlayersContext } from "../PlayersContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -29,11 +29,11 @@ const configPlayer = () => {
     let arr = [...playersArr];
 
     arr.push({ name: name, gender: gender, preferences: preferences });
-    setPlayersArr(arr);
+    setPlayersArr && setPlayersArr(arr);
   };
 
   const setAddButton = () => {
-    if ((name.length > 0) & (preferences.length > 0)) {
+    if (name.length > 0 && preferences.length > 0) {
       return false;
     } else return true;
   };
@@ -122,7 +122,7 @@ const configPlayer = () => {
           style={{
             color: "white",
             fontSize: 15,
-            fontWeight: 600,
+            fontWeight: "600",
             marginTop: 10,
           }}
         >
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     width: (width * 0.8) / 2,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: "4px",
+    borderWidth: 4,
     borderColor: blue,
   },
 
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     height: 60,
     backgroundColor: "white",
     width: width * 0.8,
-    borderWidth: "3px",
+    borderWidth: 3,
     borderColor: "blue",
     borderRadius: 10,
   },

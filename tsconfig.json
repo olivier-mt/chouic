@@ -9,6 +9,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
 
-    "components/Player.jsx"
+    "app/index.js",
+    "components/Player.tsx"
   ]
 }
